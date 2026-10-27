@@ -1,0 +1,77 @@
+<!-- node server.js -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/catbounce.js" defer></script>
+    <script src="js/btns.js" defer></script>
+    <script src="js/main.js" defer></script>
+    <title>cat.</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+
+</head>
+<body>
+
+    <!-- MAIN CAT BOUNCE -->
+    <div class="cat-bouncer" id="bouncer">
+        <img src="cats/ah_so_cat.png" id="cat" alt="*insert cat image here*" width="200" height="200">
+    </div>
+
+    <!-- CREDITS -->
+    <div class="credit">
+        <a href="https://www.youtube.com/watch?v=7G4nFIn6GJs">"silly cat" - Carpe (YT)</a>
+    </div>
+
+    <!-- CREATOR TEXT -->
+    <div class="creator">
+        <p id="floatleft">Website by: </p><p id="floatleft_space">s</p><p id="creator">GooberBall</p>
+    </div>
+
+    <!-- BUTTONS -->
+    <div class="BTNS">
+
+        <!-- API BUTTON -->
+        <button id="api-btn">API</button>
+        <!-- mew BUTTON -->
+        <button id="mew-btn">meow :3</button>
+        <!-- SCARY BUTTON -->
+        <button id="scary-btn">👀</button>
+
+    </div>
+
+    <!-- MUTED TEXT -->
+    <div class="audio-muted">
+        <p id="red_p">Enable Audio For The Best Experience!</p>
+    </div>
+
+    <script>
+        const scriptsToLoad = ["js/main.js","js/catbounce.js","js/btns.js"]; 
+        
+        function loadScript(src, retries = 3) {
+            const script = document.createElement('script');
+            script.src = src + '?v=' + Date.now(); // Cache buster
+            script.defer = true;
+            
+            script.onerror = () => {
+                if (retries > 0) {
+                    console.warn(`Failed to load ${src}, retrying... (${retries} left)`);
+                    setTimeout(() => loadScript(src, retries - 1), 1000);
+                } else {
+                    console.error(`Could not load ${src} after multiple attempts.`);
+                }
+            };
+            
+            document.head.appendChild(script);
+        }
+
+        // Load them
+        scriptsToLoad.forEach(src => loadScript(src));
+
+        adjustButtonPositions();
+    </script>
+
+</body>
+</html>
