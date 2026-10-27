@@ -13,6 +13,7 @@ async function playMusic() {
         bg = new Audio("music/silly_cat.mp3");
         bg.loop = true;
         bg.volume = 0.5;
+        bg.mute = true;
     }
     
     const policy = navigator.getAutoplayPolicy?.("mediaelement") || "unknown";
@@ -21,11 +22,15 @@ async function playMusic() {
     
     if (policy != "allowed-muted" && policy != "disallowed") {
         document.getElementById('red_p').remove();
+        document.getElementById('fix-audio-btn').remove();
+        bg.mute = false;
         await bg.play();
         adjustButtonPositions();
     } else {
         console.warn("Autoplay blocked!", policy);
         adjustButtonPositions();
+        bg.mute = false;
+        await bg.play();
         return
     }
     

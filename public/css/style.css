@@ -33,16 +33,14 @@ html,body,head{
   margin: 0; /* kill default <p> margin */
   font-family: "Comic Sans MS", "Comic Sans", cursive;
   font-size: 16pt;
-  color: rgba(0, 0, 0, 0.35);
-  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.6);
+  color: rgba(255, 255, 255, 0.35);
 }
 
 .creator p {
   margin: 0; /* kill default <p> margin */
   font-family: "Comic Sans MS", "Comic Sans", cursive;
   font-size: 16pt;
-  color: rgba(0, 0, 0, 0.35);
-  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.6);
+  color: rgba(255, 255, 255, 0.35);
 }
 
 .creator {
@@ -65,8 +63,7 @@ html,body,head{
   margin: 0; /* kill default <p> margin */
   font-family: "Comic Sans MS", "Comic Sans", cursive;
   font-size: 16pt;
-  color: rgba(0, 0, 0, 0.35);
-  text-shadow: 0 1px 2px rgba(255, 0, 0, 0.6);
+  color: rgba(255, 0, 0, 0.65);
 }
 
 #floatleft {
@@ -74,15 +71,14 @@ html,body,head{
 }
 #floatleft_space {
   float: left;
-  color: rgba(0, 0, 0, 0);
+  color: transparent;
 }
 
 #creator  {
   margin: 0; /* kill default <p> margin */
   font-family: "Comic Sans MS", "Comic Sans", cursive;
   font-size: 16pt;
-  color: rgba(0, 0, 0, 0.35);
-  text-shadow: 0 1px 2px rgba(0, 255, 0, 0.6);
+  color: rgba(0, 255, 0, 0.35);
   float: left;
 }
 
@@ -90,8 +86,7 @@ html,body,head{
   margin: 0; /* kill default <p> margin */
   font-family: "Comic Sans MS", "Comic Sans", cursive;
   font-size: 16pt;
-  color: rgba(0, 0, 0, 0.35);
-  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.6);
+  color: rgba(255, 255, 255, 0.35);
   background-color: rgba(0, 0, 0, 0.35);
   border-radius: 15px;
   width: 100px;
