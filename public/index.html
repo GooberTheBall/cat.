@@ -1,14 +1,59 @@
 <!-- node server.js -->
+<!-- 
+    if this website is unstable, i am sorry, but portbuddy is a bitch. 
+    - GOOBERBALL
+-->
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/style.css">
-    <script src="js/catbounce.js" defer></script>
-    <script src="js/btns.js" defer></script>
-    <script src="js/main.js" defer></script>
+    <!-- Prevent browser caching during development -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+
+    <link rel="stylesheet" href="css/style.css?v=6">
+
+    <script>
+        window.adjustButtonPositions = window.adjustButtonPositions || function() {
+            const redP = document.getElementById('red_p');
+            const apiBtn = document.getElementById('api-btn');
+            const mewBtn = document.getElementById('mew-btn');
+            const scaryBtn = document.getElementById('scary-btn');
+            const togglemusicbtn = document.getElementById('toggle-music-btn');
+            const fixmusicbtn = document.getElementById('fix-music-btn');
+            
+            const offset = redP ? 40 : 0;
+            if (apiBtn) apiBtn.style.bottom = (0 + offset) + "px";
+            if (mewBtn) mewBtn.style.bottom = (40 + offset) + "px";
+            if (scaryBtn) scaryBtn.style.bottom = (80 + offset) + "px";
+            if (togglemusicbtn) togglemusicbtn.style.bottom = (120 + offset) + "px";
+        };
+    </script>
+
+    <script src="js/catbounce.js?v=6" defer></script>
+    <script src="js/btns.js?v=6" defer></script>
+    <!-- <script src="js/main.js?v=6" defer></script> -->
+
+    <script>
+        function loadMain(retries = 3) {
+            const script = document.createElement('script');
+            script.src = 'js/main.js?v=7';
+            script.defer = true;
+            script.onerror = () => {
+                if (retries > 0) {
+                    console.warn(`Portbuddy blocked main.js. Retrying in 2s... (${retries} left)`);
+                    setTimeout(() => loadMain(retries - 1), 2000);
+                }
+            };
+            document.head.appendChild(script);
+        }
+        // Call it slightly after the page loads
+        window.addEventListener('load', () => loadMain());
+    </script>
+
     <title>cat.</title>
     <link rel="icon" type="image/x-icon" href="favicon.ico">
 </head>
@@ -38,8 +83,8 @@
         <button id="mew-btn">meow :3</button>
         <!-- SCARY BUTTON -->
         <button id="scary-btn">👀</button>
-        <!-- stupid fix audio button >:c -->
-        <button id="fix-audio-btn">!Fix Audio!</button>
+        <!-- toggleble music button -->
+        <button id="toggle-music-btn">Toggle Music</button>
 
     </div>
 
@@ -47,32 +92,6 @@
     <div class="audio-muted">
         <p id="red_p">Enable Audio For The Best Experience!</p>
     </div>
-
-    <script>
-        const scriptsToLoad = ["js/main.js","js/catbounce.js","js/btns.js"]; 
-        
-        function loadScript(src, retries = 3) {
-            const script = document.createElement('script');
-            script.src = src + '?v=' + Date.now(); // Cache buster
-            script.defer = true;
-            
-            script.onerror = () => {
-                if (retries > 0) {
-                    console.warn(`Failed to load ${src}, retrying... (${retries} left)`);
-                    setTimeout(() => loadScript(src, retries - 1), 1000);
-                } else {
-                    console.error(`Could not load ${src} after multiple attempts.`);
-                }
-            };
-            
-            document.head.appendChild(script);
-        }
-
-        // Load them
-        scriptsToLoad.forEach(src => loadScript(src));
-
-        adjustButtonPositions();
-    </script>
 
 </body>
 </html>

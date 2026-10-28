@@ -85,11 +85,11 @@ html,body,head{
 .BTNS button {
   margin: 0; /* kill default <p> margin */
   font-family: "Comic Sans MS", "Comic Sans", cursive;
-  font-size: 16pt;
   color: rgba(255, 255, 255, 0.35);
   background-color: rgba(0, 0, 0, 0.35);
   border-radius: 15px;
   width: 100px;
+  height: 37px;
 }
 
 /* +40 per btn */
@@ -102,20 +102,31 @@ html,body,head{
   bottom: 10px;
   right: 14px;
   z-index: 10;
+  font-size: 16pt;
 }
 
 #mew-btn {
   position: fixed;
-  bottom: 40px;
+  bottom: 50px;
   right: 14px;
   z-index: 10;
+  font-size: 16pt;
 }
 
 #scary-btn {
   position: fixed;
-  bottom: 80px;
+  bottom: 90px;
   right: 14px;
   z-index: 10;
+  font-size: 16pt;
+}
+
+#toggle-music-btn {
+  position: fixed;
+  bottom: 130px;
+  right: 14px;
+  z-index: 10;
+  font-size: 10pt;
 }
 
 

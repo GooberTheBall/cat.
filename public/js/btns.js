@@ -27,11 +27,12 @@ scary.addEventListener('click', (ev) => {
     window.location.replace("https://cat.portbuddy.dev/fear/");
 })
 
-function adjustButtonPositions() {
+window.adjustButtonPositions = function() {
     const redP = document.getElementById('red_p');
     const apiBtn = document.getElementById('api-btn');
     const mewBtn = document.getElementById('mew-btn');
     const scaryBtn = document.getElementById('scary-btn');
+    const togglemusicbtn = document.getElementById('toggle-music-btn');
     
     // If #red_p exists, shift the buttons up by 40px
     const offset = redP ? 40 : 0;
@@ -39,4 +40,7 @@ function adjustButtonPositions() {
     apiBtn.style.bottom = (0 + offset) + "px";
     mewBtn.style.bottom = (40 + offset) + "px";
     scaryBtn.style.bottom = (80 + offset) + "px";
+    togglemusicbtn.style.bottom = (120 + offset) + "px";
 }
+
+window.adjustButtonPositions();

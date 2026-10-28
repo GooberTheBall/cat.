@@ -12,24 +12,57 @@ const PUBLIC = path.join(__dirname, 'public');
 const CATS_DIR = path.join(PUBLIC, 'cats');
 const MANIFEST = path.join(__dirname, 'cats.json');
 
+// EXTRA APPS HERE!!!
 app.use('/fear', fearApp);
 
-// fix the stupid MIME shit
-app.use(express.static(path.join(__dirname, 'public'), {
-  setHeaders: (res, filePath) => {
-    // Force correct MIME types so the tunnel can't mess them up
-    // NOTE: css is still getting fucked up and i honestly don't know why nor how to fix it atp
-    if (filePath.endsWith('.css')) {
-      res.setHeader('Content-Type', 'text/css; charset=utf-8');
-    } else if (filePath.endsWith('.js')) {
-      res.setHeader('Content-Type', 'application/javascript; charset=utf-8');
-    } else if (filePath.endsWith('.mp4')) {
-      res.setHeader('Content-Type', 'video/mp4');
-    } else if (filePath.endsWith('.mp3')) {
-      res.setHeader('Content-Type', 'audio/mpeg');
-    }
-  }
-}));
+// this shit doesn't really matter, reloading some times still fucks it up
+app.get('/js/:file', (req, res) => {
+    const filePath = path.join(PUBLIC, 'js', req.params.file);
+    if (!fs.existsSync(filePath)) return res.status(404).send('Not found');
+    
+    res.setHeader('Content-Type', 'application/javascript; charset=utf-8');
+    res.removeHeader('X-Content-Type-Options'); 
+    
+    res.sendFile(filePath);
+});
+
+app.get('/css/:file', (req, res) => {
+    const filePath = path.join(PUBLIC, 'css', req.params.file);
+    if (!fs.existsSync(filePath)) return res.status(404).send('Not found');
+    
+    res.setHeader('Content-Type', 'text/css; charset=utf-8');
+    res.removeHeader('X-Content-Type-Options');
+    
+    res.sendFile(filePath);
+});
+
+app.get('/music/:file', (req, res) => {
+    const filePath = path.join(PUBLIC, 'music', req.params.file);
+    if (!fs.existsSync(filePath)) return res.status(404).send('Not found');
+    
+    res.setHeader('Content-Type', 'audio/mpeg');
+    res.removeHeader('X-Content-Type-Options');
+    
+    fs.readFile(filePath, (err, data) => {
+        if (err) return res.status(500).send('Error reading file');
+        res.send(data);
+    });
+});
+
+app.get('/sfx/:file', (req, res) => {
+    const filePath = path.join(PUBLIC, 'sfx', req.params.file);
+    if (!fs.existsSync(filePath)) return res.status(404).send('Not found');
+    
+    res.setHeader('Content-Type', 'audio/mpeg');
+    res.removeHeader('X-Content-Type-Options');
+    
+    fs.readFile(filePath, (err, data) => {
+        if (err) return res.status(500).send('Error reading file');
+        res.send(data);
+    });
+});
+
+app.use(express.static(PUBLIC));
 
 function readImages() {
   return fs.readdirSync(CATS_DIR).filter(f => /\.(jpe?g|png|gif|webp)$/i.test(f));
@@ -100,21 +133,12 @@ app.get('/api/cats/:id', (req, res, next) => {
     return res.status(400).json({ error: 'Bad path' });
   }
   
-  let stat;
-  try {
-    stat = fs.statSync(fullPath);
-  } catch {
-    return res.status(404).json({ error: 'Not found' });
-  }
-  
-  res.setHeader('Content-Type', MIME[path.extname(file).toLowerCase()] || 'application/octet-stream');
-  res.setHeader('Content-Length', stat.size);
-  res.setHeader('Accept-Ranges', 'none');
-  res.setHeader('Cache-Control', 'no-store');
-  
-  const stream = fs.createReadStream(fullPath);
-  stream.on('error', next);
-  stream.pipe(res);
+  res.sendFile(fullPath, (err) => {
+    if (err) {
+      console.error("Error sending file:", err);
+      if (!res.headersSent) next(err);
+    }
+  });
 });
 
 app.listen(8000, () => console.log('Server running on port 8000'));

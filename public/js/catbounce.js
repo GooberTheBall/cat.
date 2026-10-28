@@ -87,5 +87,8 @@ function playYay() {
     }
 }
 
-pickNewDirection();
-bounceLoop();
+// wait for the page to fully load before starting the bounce loop
+window.addEventListener('load', () => {
+    pickNewDirection();
+    bounceLoop();
+});

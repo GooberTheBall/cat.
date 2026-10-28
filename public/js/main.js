@@ -10,29 +10,52 @@ let bg;
 
 async function playMusic() {
     if (!bg) {
+        console.log("MAKING NEW AUDIO");
         bg = new Audio("music/silly_cat.mp3");
         bg.loop = true;
         bg.volume = 0.5;
         bg.mute = true;
+
+        bg.addEventListener('error', (e) => {
+            console.error("Audio failed to load! Check the URL:", bg.src);
+            console.error("Error details:", bg.error);
+        });
+    }
+
+    // Setup toggle button
+    const toggle_music = document.getElementById("toggle-music-btn");
+    
+    try {
+        // Try to play it
+        await bg.play();
+        console.log("Audio started (muted).");
+
+        const policy = navigator.getAutoplayPolicy?.("mediaelement") || "unknown";
+        console.log("Current autoplay policy:", policy);
+        
+        // If we are allowed to have audio, unmute it
+        if (policy !== "disallowed") {
+            bg.mute = false;
+            console.log("PLAYING (Unmuted)");
+            document.getElementById('red_p')?.remove();
+            document.getElementById('fix-audio-btn')?.remove();
+            if (toggle_music) {
+                toggle_music.addEventListener('click', (ev) => {
+                    if (bg && bg.volume != 0) {
+                        bg.volume = 0;
+                    } else {
+                        bg.volume = 0.5
+                    }
+                });
+            }
+        } else {
+            console.log("D:")
+        }
+    } catch (err) {
+        console.warn("Even muted autoplay failed:", err);
     }
     
-    const policy = navigator.getAutoplayPolicy?.("mediaelement") || "unknown";
-    console.log("Current autoplay policy:", policy);
-    
-    
-    if (policy != "allowed-muted" && policy != "disallowed") {
-        document.getElementById('red_p').remove();
-        document.getElementById('fix-audio-btn').remove();
-        bg.mute = false;
-        await bg.play();
-        adjustButtonPositions();
-    } else {
-        console.warn("Autoplay blocked!", policy);
-        adjustButtonPositions();
-        bg.mute = false;
-        await bg.play();
-        return
-    }
+    adjustButtonPositions();
     
     window.addEventListener('pageshow', (event) => {
         if (bg && bg.paused) {
@@ -106,4 +129,8 @@ async function run_forever() {
 }
 
 playMusic();
-run_forever();
+
+// Make sure DOM is loaded before starting
+window.addEventListener('DOMContentLoaded', () => {
+    run_forever();
+});
