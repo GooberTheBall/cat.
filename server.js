@@ -3,6 +3,7 @@ import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
 import fearApp from './public/fear/fear_server.js';
+import exeApp from './public/exe/exe_server.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname  = path.dirname(__filename);
@@ -14,6 +15,7 @@ const MANIFEST = path.join(__dirname, 'cats.json');
 
 // EXTRA APPS HERE!!!
 app.use('/fear', fearApp);
+app.use('/exe', exeApp);
 
 // this shit doesn't really matter, reloading some times still fucks it up
 app.get('/js/:file', (req, res) => {
