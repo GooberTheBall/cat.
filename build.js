@@ -44,9 +44,9 @@ for (const [id, file] of Object.entries(idToFile)) {
 }
 
 
-// fear.html -> fear/index.html
-const fearSrc = path.join(PUBLIC, 'fear', 'fear.html');
-const fearDst = path.join(PUBLIC, 'fear', 'index.html');
+// pages/fear/fear.html -> pages/fear/index.html
+const fearSrc = path.join(PUBLIC, 'pages/fear', 'fear.html');
+const fearDst = path.join(PUBLIC, 'pages/fear', 'index.html');
 if (fs.existsSync(fearSrc)) fs.copyFileSync(fearSrc, fearDst);
 
 console.log(`Done. ${Object.keys(idToFile).length} cats mapped.`);

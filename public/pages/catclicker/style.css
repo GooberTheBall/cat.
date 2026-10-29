@@ -1,0 +1,119 @@
+html,body{ 
+  margin:0;
+  height:100%;
+  overflow-y: hidden;
+  overflow-x: hidden;
+  color: #181a1b;
+  background-color: #181a1b;
+}
+
+#clicker-box {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#click-cat-img {
+  transition: all 0.1s ease-in-out;
+}
+
+#count-box p {
+  color: white;
+  font-size: 30px;
+  transition: all 0.3s ease-in-out;
+  transform: translateX(-80px);
+  pointer-events: none;
+}
+
+#count-box {
+  position: fixed;
+  top: 10px;
+  left: 14px;
+  z-index: 10;
+  pointer-events: none;
+}
+
+#count-box p {
+  color: white;
+  font-size: 30px;
+  transition: all 0.3s ease-in-out;
+  transform: translateX(-200px);
+  pointer-events: none;
+}
+
+#survive-box {
+  position: absolute;
+  top: -50px;
+  left: 0;
+  right: 0;
+  margin-inline: auto;
+  width: max-content;
+  pointer-events: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#survive-box p {
+  color: red;
+  font-size: 30px;
+  transition: all 0.3s ease-in-out;
+  transform: translateY(-80px);
+  pointer-events: none;
+}
+
+#win-box {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin-inline: auto;
+  width: max-content;
+  pointer-events: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#win-box p {
+  color: white;
+  font-size: 30px;
+  transition: all 1s ease-in-out;
+  pointer-events: none;
+  opacity: 0;
+}
+
+#lose-box {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin-inline: auto;
+  width: max-content;
+  pointer-events: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#lose-box p {
+  color: black;
+  font-size: 30px;
+  transition: all 1s ease-in-out;
+  pointer-events: none;
+  opacity: 0;
+}
+
+
+.eviltint {
+	position: fixed;
+	height: 100vh; width: 100vw;
+	z-index: 10000; display: flex;
+	background: red;
+	opacity: 0;
+	visibility: hidden;
+	pointer-events: none;
+}

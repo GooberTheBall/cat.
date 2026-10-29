@@ -129,6 +129,7 @@ async function run_forever() {
     }
 }
 
+// Why won't the music also play when the DOM is loaded?? Bro thinks they ain't like run_forever(); 😭
 playMusic();
 
 // Make sure DOM is loaded before starting

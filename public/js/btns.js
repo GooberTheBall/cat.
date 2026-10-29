@@ -27,9 +27,10 @@ if(!localStorage.getItem('fear')){
 const scary = document.getElementById("scary-btn")
 scary.addEventListener('click', (ev) => {
     localStorage.setItem('fear', true);
-    window.location.replace("fear/");
+    window.location.replace("./pages/fear/");
 })
 
+// Totally not a virus :D
 const exe = document.getElementById("exe-btn");
 exe.addEventListener("click", () => {
     const link = document.createElement('a');
@@ -39,6 +40,7 @@ exe.addEventListener("click", () => {
     document.body.removeChild(link);
 });
 
+// Why the fuck am i doing this to myself
 window.adjustButtonPositions = function() {
     const redP = document.getElementById('red_p');
     const apiBtn = document.getElementById('api-btn');
