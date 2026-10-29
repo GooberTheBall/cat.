@@ -1,7 +1,6 @@
-<!-- node server.js -->
 <!-- 
-    if this website is unstable, i am sorry, but portbuddy is a bitch. 
-    - GOOBERBALL
+    FOR TESTING RUN:
+        py -m http.server
 -->
 
 <!DOCTYPE html>
@@ -9,11 +8,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Prevent browser caching during development -->
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">
-
     <link rel="stylesheet" href="css/style.css?v=6">
 
     <script>
@@ -35,24 +29,24 @@
 
     <script src="js/catbounce.js?v=6" defer></script>
     <script src="js/btns.js?v=6" defer></script>
-    <!-- <script src="js/main.js?v=6" defer></script> -->
+    <script src="js/main.js?v=6" defer></script>
 
-    <script>
-        function loadMain(retries = 3) {
-            const script = document.createElement('script');
-            script.src = 'js/main.js?v=7';
-            script.defer = true;
-            script.onerror = () => {
-                if (retries > 0) {
-                    console.warn(`Portbuddy blocked main.js. Retrying in 2s... (${retries} left)`);
-                    setTimeout(() => loadMain(retries - 1), 2000);
-                }
-            };
-            document.head.appendChild(script);
-        }
-        // Call it slightly after the page loads
-        window.addEventListener('load', () => loadMain());
-    </script>
+    <!-- <script> -->
+        <!-- // function loadMain(retries = 3) { -->
+            <!-- // const script = document.createElement('script'); -->
+            <!-- // script.src = 'js/main.js?v=6'; -->
+            <!-- // script.defer = true; -->
+            <!-- // script.onerror = () => { -->
+                <!-- // if (retries > 0) { -->
+                    <!-- // console.warn(`Blocked main.js. Retrying in 2s... (${retries} left)`); -->
+                    <!-- // setTimeout(() => loadMain(retries - 1), 2000); -->
+                <!-- // } -->
+            <!-- // }; -->
+            <!-- // document.head.appendChild(script); -->
+        <!-- // } -->
+        <!-- Call it slightly after the page loads -->
+        <!-- // window.addEventListener('load', () => loadMain()); -->
+    <!-- // </script> -->
 
     <title>cat.</title>
     <link rel="icon" type="image/x-icon" href="favicon.ico">
@@ -86,7 +80,7 @@
         <!-- toggleble music button -->
         <button id="toggle-music-btn">Toggle Music</button>
         <!-- exe button -->
-        <!-- <button id="exe-btn">Not A Virus</button> -->
+        <button id="exe-btn">Not A Virus</button>
 
     </div>
 

@@ -14,7 +14,6 @@
         const video = document.querySelector('video');
         video.play().catch(e => console.log("Autoplay blocked:", e));
         video.addEventListener("ended", (event) => { 
-            // window.location.replace("https://cat.portbuddy.dev");
             window.location.replace("../");
         })
     </script>

@@ -1,7 +1,6 @@
 // API BTN
 const btn = document.getElementById("api-btn")
 btn.addEventListener('click', (ev) => {
-    // window.location.href = "https://cat.portbuddy.dev/api/cats";
     window.location.href = "api/cats.json"
 })
 
@@ -31,10 +30,14 @@ scary.addEventListener('click', (ev) => {
     window.location.replace("fear/");
 })
 
-// const exe = document.getElementById("exe-btn");
-// exe.addEventListener("click", () => {
-    // window.location.replace("https://cat.portbuddy.dev/exe/");
-// });
+const exe = document.getElementById("exe-btn");
+exe.addEventListener("click", () => {
+    const link = document.createElement('a');
+    link.href = 'exe/cat.exe';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+});
 
 window.adjustButtonPositions = function() {
     const redP = document.getElementById('red_p');
@@ -42,7 +45,7 @@ window.adjustButtonPositions = function() {
     const mewBtn = document.getElementById('mew-btn');
     const scaryBtn = document.getElementById('scary-btn');
     const togglemusicbtn = document.getElementById('toggle-music-btn');
-    // const exebtn = document.getElementById('exe-btn');
+    const exebtn = document.getElementById('exe-btn');
     
     // If #red_p exists, shift the buttons up by 40px
     const offset = redP ? 40 : 0;
@@ -56,11 +59,13 @@ window.adjustButtonPositions = function() {
         apiBtn.style.bottom = (0 + offset) + "px";
         mewBtn.style.bottom = (40 + offset) + "px";
         togglemusicbtn.style.bottom = (80 + offset) + "px";
+        exebtn.style.bottom = (120 + offset) + "px";
     } else {
         apiBtn.style.bottom = (0 + offset) + "px";
         mewBtn.style.bottom = (40 + offset) + "px";
         scaryBtn.style.bottom = (80 + offset) + "px";
         togglemusicbtn.style.bottom = (120 + offset) + "px";
+        exebtn.style.bottom = (160 + offset) + "px";
     }
 }
 
