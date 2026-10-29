@@ -1,7 +1,8 @@
 // API BTN
 const btn = document.getElementById("api-btn")
 btn.addEventListener('click', (ev) => {
-    window.location.href = "https://cat.portbuddy.dev/api/cats";
+    // window.location.href = "https://cat.portbuddy.dev/api/cats";
+    window.location.href = "api/cats.json"
 })
 
 // MEW BTN
@@ -27,7 +28,7 @@ if(!localStorage.getItem('fear')){
 const scary = document.getElementById("scary-btn")
 scary.addEventListener('click', (ev) => {
     localStorage.setItem('fear', true);
-    window.location.replace("https://cat.portbuddy.dev/fear/");
+    window.location.replace("fear/");
 })
 
 // const exe = document.getElementById("exe-btn");

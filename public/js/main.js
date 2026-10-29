@@ -71,8 +71,8 @@ async function playMusic() {
 }
 
 async function loadCats() {
-    const res = await fetch('/api/cats');
-    if (!res.ok) throw new Error(`/api/cats -> ${res.status}`);
+    const res = await fetch('api/cats.json');
+    if (!res.ok) throw new Error(`api/cats.json -> ${res.status}`);
     const data = await res.json();
     if (!Array.isArray(data) || !data.length) throw new Error('No cats returned');
     return data;
