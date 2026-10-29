@@ -18,7 +18,7 @@ const win = new Audio("../../sfx/children-yay.mp3");
 const lose1 = new Audio("../../sfx/audience-aw.mp3");
 const lose2 = new Audio("../../sfx/sad-trombone.mp3");
 
-let meow_count = 25;
+let meow_count = 0;
 let scaling = 0;
 let txt_move_in = 0;
 let game_state = 0;
