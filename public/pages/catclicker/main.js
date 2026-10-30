@@ -8,6 +8,8 @@ const survivetxttime = document.getElementById("survive-txt-time");
 const surviveBOX = document.getElementById("survive-box");
 const wintxt = document.getElementById("win-txt");
 const losetxt = document.getElementById("lose-txt");
+const cpstxt = document.getElementById("best-cps-txt");
+const bestcounttxt = document.getElementById("best-count-txt");
 
 const click_mew_audio1 = new Audio("../../sfx/mario-meow.mp3");
 const click_mew_audio2 = new Audio("../../sfx/meow-irl.mp3");
@@ -17,6 +19,11 @@ const chips = new Audio("../../sfx/chips.mp3");
 const win = new Audio("../../sfx/children-yay.mp3");
 const lose1 = new Audio("../../sfx/audience-aw.mp3");
 const lose2 = new Audio("../../sfx/sad-trombone.mp3");
+const victory_sound = new Audio("../../sfx/victory.mp3")
+const lose_count_sfx = new Audio("../../sfx/snd_hurt1.mp3")
+const gain_count_sfx = new Audio("../../sfx/snd_select.mp3")
+
+const scary_music = new Audio("../../music/SCARY AAA.mp3")
 
 let meow_count = 0;
 let scaling = 0;
@@ -32,9 +39,18 @@ let SURVIVE_SHAKING = false;
 let TIME_TO_SURVIVE = 60; // a minute
 
 let PLAY_SOUND_ONCE = false;
+let PLAY_MUSIC_ONCE = false;
 
 const evilTint = document.querySelector('.eviltint');
 evilTintExists = evilTint !== null;
+
+let clickTimestamps = [];
+let bestCPS = 0;
+const CPS_WINDOW_MS = 1000;
+let CPS_SHOWN = false;
+
+let BEST_COUNT_SHOWN = false;
+
 
 function fadeRedIn() {
 	if (!evilTintExists) return;
@@ -56,11 +72,11 @@ function randint(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
-function playWithPitch(audio, pitch) {
+function playWithPitch(audio, pitch, vol) {
     const soundClone = audio.cloneNode();
     soundClone.preservesPitch = false;
     soundClone.playbackRate = pitch;
-    soundClone.volume = 0.5;
+    soundClone.volume = vol;
     soundClone.play();
 };
 
@@ -68,7 +84,7 @@ function playRandomizedPitch(audio) {
     const soundClone = audio.cloneNode();
     soundClone.preservesPitch = false;
     soundClone.playbackRate = randfloat(0.5,1.0);
-    soundClone.volume = 0.5;
+    soundClone.volume = 0.2;
     soundClone.play();
 };
 
@@ -85,23 +101,34 @@ function playRandomSound() {
     };
 };
 
+function play_music() {
+    scary_music.volume = 0.7;
+    scary_music.play();
+}
+
+function stop_music() {
+    if (scary_music.paused != true) {
+        scary_music.pause();
+    };
+};
+
 function add_count(amount) {
     meow_count = meow_count + amount;
     counttxt.textContent = `${meow_count}`;
 
-    console.log(game_state)
+    console.log(game_state);
 
     if (meow_count > 4) {
         txt_move_in = 1;
         console.log(meow_count);
-    }
-    change_cat()
-}
+    };
+    change_cat();
+};
 
 function lose_count(amount) {
     meow_count = meow_count - amount;
     counttxt.textContent = `${meow_count}`;
-}
+};
 
 
 // yes im doing a different way of getting the cat images, fuck you
@@ -189,6 +216,22 @@ function change_cat_to_EVIL() {
 }
 
 
+function recordClickCPS() {
+    const now = performance.now();
+    clickTimestamps.push(now);
+
+    // Drop anything older than 1 second
+    while (clickTimestamps.length && now - clickTimestamps[0] > CPS_WINDOW_MS) {
+        clickTimestamps.shift();
+    }
+
+    // How many clicks landed in the last second?
+    if (clickTimestamps.length > bestCPS) {
+        bestCPS = clickTimestamps.length;
+    }
+}
+
+
 let prevtime = 0;
 function frame(timestamp) {
     const deltatime = (timestamp - prevtime) / 1000;
@@ -213,7 +256,7 @@ function frame(timestamp) {
     };
 
     if (txt_move_in > 0) {
-        counttxt.style.transform = "translateX(20px)";
+        counttxt.style.transform = "translateY(-150px)";
         // txt_move_in -= deltatime;
         delta(txt_move_in);
     };
@@ -231,6 +274,10 @@ function frame(timestamp) {
     if (game_state == 2) {
         if (lose_count_time <= 0) {
             lose_count(1);
+            const shake_x_count = (Math.random() * 2 - 1) * 4;
+            counttxt.style.transform = `translateX(${shake_x_count}px)`;
+            counttxt.style.color = "red";
+            playWithPitch(lose_count_sfx, randfloat(0.7,1.0), 0.3);
             lose_count_time = lose_count_time_max_num;
         } else {
             lose_count_time = lose_count_time - deltatime;
@@ -257,34 +304,56 @@ function frame(timestamp) {
         } else if (TIME_TO_SURVIVE <= 0) {
             game_state = 3; // WIN
         }
+
+        if (PLAY_MUSIC_ONCE != true) {
+            PLAY_MUSIC_ONCE = true;
+            play_music()
+        };
     };
 
     if (game_state == 3) {
         fadeRedOut();
         survivetxt.style.transform = `translateY(-200px)`;
-        counttxt.style.transform = "translateX(-80px)";
+        counttxt.style.transform = "translateY(200px)";
         clickercat.style.opacity = "0";
         wintxt.style.opacity = "1";
         clickercatBOX.style.pointerEvents = "none";
 
         if (PLAY_SOUND_ONCE == false) {
             PLAY_SOUND_ONCE = true;
-            playWithPitch(win, 1.0);
+            playWithPitch(win, 1.0, 0.5);
+            playWithPitch(victory_sound, 1.0, 0.5);
         };
+
+        if (!CPS_SHOWN) {
+            CPS_SHOWN = true;
+            cpstxt.textContent = `Best CPS: ${bestCPS}`;
+            cpstxt.style.opacity = "1";
+        }
+
+        if (!BEST_COUNT_SHOWN) {
+            BEST_COUNT_SHOWN = true;
+            bestcounttxt.textContent = `Best Count Amount: ${meow_count}`
+            bestcounttxt.style.opacity = "1";
+        }
+
+        stop_music()
     };
 
     if (game_state == 4) {
         survivetxt.style.transform = `translateY(-200px)`;
-        counttxt.style.transform = "translateX(-80px)";
+        counttxt.style.transform = "translateY(200px)";
         clickercatBOX.style.pointerEvents = "none";
         losetxt.style.opacity = "1";
         change_cat_to_EVIL()
 
         if (PLAY_SOUND_ONCE == false) {
             PLAY_SOUND_ONCE = true;
-            playWithPitch(lose1, 1.0);
-            playWithPitch(lose2, 1.0);
+            playWithPitch(lose1, 1.0, 0.5);
+            playWithPitch(lose2, 1.0, 0.5);
         };
+
+        stop_music()
     }
 
     window.requestAnimationFrame(frame);
@@ -297,11 +366,14 @@ window.requestAnimationFrame((timestamp) => {
 
 clickercat.addEventListener('click', () => {
     console.log('Image clicked!');
+    if (game_state == 2) {
+        recordClickCPS();
+    };
     scaling = 0.04; // SCALE IMAGE
 
     // PLAY SOUNDS
     playRandomSound();
-    playWithPitch(chips, randfloat(0.7,1.0));
+    playWithPitch(chips, randfloat(0.7,1.0), 0.3);
 
     // IF OVER 24, START REMOVING COUNT, ELSE JUST CONTINUE
     if (meow_count > 24 && game_state == 0) {
@@ -309,7 +381,10 @@ clickercat.addEventListener('click', () => {
         add_count(1);
         fadeRedIn();
         SURVIVE_SHAKING = true
+        counttxt.style.color = "white";
     } else {
         add_count(1);
+        playWithPitch(gain_count_sfx, randfloat(0.7,1.0), 0.3);
+        counttxt.style.color = "white";
     }
 });

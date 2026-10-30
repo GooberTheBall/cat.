@@ -1,12 +1,12 @@
 // API BTN
 const btn = document.getElementById("api-btn")
 btn.addEventListener('click', (ev) => {
-    window.location.href = "api/cats.json"
+    window.location.href = "../../api/cats.json"
 })
 
 // MEW BTN
 const mew = document.getElementById("mew-btn")
-const mew_audio = new Audio("sfx/mario-meow.mp3")
+const mew_audio = new Audio("../../sfx/mario-meow.mp3")
 mew_audio.volume = 0.5
 
 function meow() {
@@ -27,14 +27,14 @@ if(!localStorage.getItem('fear')){
 const scary = document.getElementById("scary-btn")
 scary.addEventListener('click', (ev) => {
     localStorage.setItem('fear', true);
-    window.location.replace("./pages/fear/");
+    window.location.replace("../fear/");
 })
 
 // Totally not a virus :D
 const exe = document.getElementById("exe-btn");
 exe.addEventListener("click", () => {
     const link = document.createElement('a');
-    link.href = 'exe/cat.exe';
+    link.href = '../../exe/cat.exe';
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);

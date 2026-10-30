@@ -11,7 +11,7 @@ let bg;
 async function playMusic() {
     if (!bg) {
         console.log("MAKING NEW AUDIO");
-        bg = new Audio("music/silly_cat.mp3");
+        bg = new Audio("../../music/silly_cat.mp3");
         bg.loop = true;
         bg.volume = 0.5;
         bg.mute = true;
@@ -70,16 +70,29 @@ async function playMusic() {
     });
 }
 
+
+// GIFS NOW WORK :DDD
+let catsList = [];
+
 async function loadCats() {
-    const res = await fetch('api/cats.json');
-    console.log(res.ok)
-    if (!res.ok) throw new Error(`api/cats.json -> ${res.status}`);
-    const data = await res.json();
-    if (!Array.isArray(data) || !data.length) throw new Error('No cats returned');
-    return data;
+    try {
+        const res = await fetch('../../api/cats.json?v=' + Date.now());
+        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+        
+        catsList = await res.json();
+        
+        if (!Array.isArray(catsList) || !catsList.length) {
+            throw new Error('No cats returned in JSON');
+        }
+        console.log(`Successfully loaded ${catsList.length} cats!`);
+    } catch (err) {
+        console.error('Could not load cats:', err);
+    }
+    return catsList;
 }
 
 async function run_forever() {
+    // I DONT NEED COMMENTS HERE, I KNOW WHAT THE FUCK I AM DOING!!
     let cats;
     try {
         cats = await loadCats();
@@ -89,23 +102,24 @@ async function run_forever() {
     }
     
     const catImg = document.getElementById('cat');
-    const pick = () => cats[Math.floor(Math.random() * cats.length)];
+    // const pick = () => cats[Math.floor(Math.random() * cats.length)];
+    const pick = () => {
+        const p = cats[Math.floor(Math.random() * cats.length)];
+        return /^(?:[a-z]+:)?\//i.test(p) ? p : '../../' + p;
+    };
     let failCount = 0;
     
     function updateCat() {
-        // If a file is totally corrupt or the tunnel is dead, don't loop forever
         if (failCount > 5) {
             console.warn("Too many failed loads, sticking with current image.");
             failCount = 0; 
             return;
         }
         
-        // Add ?r= to bypass browser cache, but load it in the background first
         const nextCatUrl = pick() + '?r=' + Date.now();
         const tempImg = new Image();
         
         tempImg.onload = () => {
-            // Only update the visible image if it actually loaded successfully
             catImg.src = nextCatUrl;
             failCount = 0;
         };
@@ -113,14 +127,12 @@ async function run_forever() {
         tempImg.onerror = () => {
             console.warn('Cat image failed to load:', nextCatUrl);
             failCount++;
-            // Wait 1.5 seconds before trying a different image
             setTimeout(updateCat, 1500); 
         };
         
         tempImg.src = nextCatUrl;
     }
     
-    // Load the very first cat
     updateCat();
     
     while (true) {

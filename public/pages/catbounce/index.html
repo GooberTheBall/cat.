@@ -1,0 +1,76 @@
+<!-- 
+    FOR TESTING RUN:
+        py -m http.server
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css?v=6">
+
+    <script>
+        // Dear god help me, this is painful, i ain't even updating this shit, why the fuck do i have this here???
+        window.adjustButtonPositions = window.adjustButtonPositions || function() {
+            const redP = document.getElementById('red_p');
+            const apiBtn = document.getElementById('api-btn');
+            const mewBtn = document.getElementById('mew-btn');
+            const scaryBtn = document.getElementById('scary-btn');
+            const togglemusicbtn = document.getElementById('toggle-music-btn');
+            const fixmusicbtn = document.getElementById('fix-music-btn');
+            
+            const offset = redP ? 40 : 0;
+            if (apiBtn) apiBtn.style.bottom = (0 + offset) + "px";
+            if (mewBtn) mewBtn.style.bottom = (40 + offset) + "px";
+            if (scaryBtn) scaryBtn.style.bottom = (80 + offset) + "px";
+            if (togglemusicbtn) togglemusicbtn.style.bottom = (120 + offset) + "px";
+        };
+    </script>
+
+    <script src="catbounce.js?v=6" defer></script>
+    <script src="btns.js?v=6" defer></script>
+    <script src="main.js?v=6" defer></script>
+
+    <title>cat.</title>
+</head>
+<body>
+
+    <!-- MAIN CAT BOUNCE -->
+    <div class="cat-bouncer" id="bouncer">
+        <img src="../../cats/ah_so_cat.png" id="cat" alt="*insert cat image here*" width="200" height="200">
+    </div>
+
+    <!-- CREDITS -->
+    <div class="credit">
+        <a href="https://www.youtube.com/watch?v=7G4nFIn6GJs">"silly cat" - Carpe (YT)</a>
+    </div>
+
+    <!-- CREATOR TEXT -->
+    <!-- <div class="creator"> -->
+        <!-- <p id="floatleft">Website by: </p><p id="floatleft_space">s</p><p id="creator">GooberBall</p> -->
+    <!-- </div> -->
+
+    <!-- BUTTONS -->
+    <div class="BTNS">
+
+        <!-- API BUTTON -->
+        <button id="api-btn">API</button>
+        <!-- mew BUTTON -->
+        <button id="mew-btn">meow :3</button>
+        <!-- SCARY BUTTON -->
+        <button id="scary-btn">👀</button>
+        <!-- toggleble music button -->
+        <button id="toggle-music-btn">Toggle Music</button>
+        <!-- exe button -->
+        <button id="exe-btn">Not A Virus</button>
+
+    </div>
+
+    <!-- MUTED TEXT -->
+    <div class="audio-muted">
+        <p id="red_p">Enable Audio For The Best Experience!</p>
+    </div>
+
+</body>
+</html>

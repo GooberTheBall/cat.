@@ -1,6 +1,6 @@
 const bouncer = document.getElementById('bouncer');
 const catImg  = document.getElementById('cat');
-const yaySound = new Audio('sfx/yay.mp3');
+const yaySound = new Audio('../../sfx/yay.mp3');
 
 let x = Math.floor(Math.random() * (600 - 800 + 1)) + 800, y = Math.floor(Math.random() * (600 - 800 + 1)) + 800;
 let vx = 2, vy = 2;

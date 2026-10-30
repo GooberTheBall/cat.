@@ -1,77 +1,140 @@
-<!-- 
-    FOR TESTING RUN:
-        py -m http.server
--->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/style.css?v=6">
-
-    <script>
-        // Dear god help me, this is painful, i ain't even updating this shit, why the fuck do i have this here???
-        window.adjustButtonPositions = window.adjustButtonPositions || function() {
-            const redP = document.getElementById('red_p');
-            const apiBtn = document.getElementById('api-btn');
-            const mewBtn = document.getElementById('mew-btn');
-            const scaryBtn = document.getElementById('scary-btn');
-            const togglemusicbtn = document.getElementById('toggle-music-btn');
-            const fixmusicbtn = document.getElementById('fix-music-btn');
-            
-            const offset = redP ? 40 : 0;
-            if (apiBtn) apiBtn.style.bottom = (0 + offset) + "px";
-            if (mewBtn) mewBtn.style.bottom = (40 + offset) + "px";
-            if (scaryBtn) scaryBtn.style.bottom = (80 + offset) + "px";
-            if (togglemusicbtn) togglemusicbtn.style.bottom = (120 + offset) + "px";
-        };
-    </script>
-
-    <script src="js/catbounce.js?v=6" defer></script>
-    <script src="js/btns.js?v=6" defer></script>
-    <script src="js/main.js?v=6" defer></script>
-
-    <title>cat.</title>
+    <title>Welcome To cat.</title>
+    <link rel="stylesheet" href="style.css">
     <link rel="icon" type="image/x-icon" href="favicon.ico">
 </head>
 <body>
-
-    <!-- MAIN CAT BOUNCE -->
-    <div class="cat-bouncer" id="bouncer">
-        <img src="cats/ah_so_cat.png" id="cat" alt="*insert cat image here*" width="200" height="200">
+    <div class="TITLE">
+        <h1>WELCOME TO</h1>
+        <img src="../public/imgs/main/logo.png" width="180" height="120">
+        <!-- <p>(CREATED BY GooberBall (GooberTheBall))</p> -->
     </div>
 
-    <!-- CREDITS -->
-    <div class="credit">
-        <a href="https://www.youtube.com/watch?v=7G4nFIn6GJs">"silly cat" - Carpe (YT)</a>
+    <!-- <hr> -->
+
+    <div class="about-box-title">
+        <!-- <h2>EPIC PAGES</h2> -->
+         <img src="../public/imgs/main/about_logo.png">
     </div>
 
-    <!-- CREATOR TEXT -->
-    <div class="creator">
-        <p id="floatleft">Website by: </p><p id="floatleft_space">s</p><p id="creator">GooberBall</p>
+    <div class="ZE-ABOUT-BOX">
+        <div class="about">
+            <span>
+                "cat." is a silly website I made for fun because I was bored. <br>
+                A whole website dedicated to cats. That's all there is to it. <br>
+                :3
+            </span>
+        </div>
     </div>
 
-    <!-- BUTTONS -->
-    <div class="BTNS">
+    <!-- <hr> -->
+    <div id="space"></div>
 
-        <!-- API BUTTON -->
-        <button id="api-btn">API</button>
-        <!-- mew BUTTON -->
-        <button id="mew-btn">meow :3</button>
-        <!-- SCARY BUTTON -->
-        <button id="scary-btn">👀</button>
-        <!-- toggleble music button -->
-        <button id="toggle-music-btn">Toggle Music</button>
-        <!-- exe button -->
-        <button id="exe-btn">Not A Virus</button>
-
+    <div class="content-box-title">
+        <!-- <h2>EPIC PAGES</h2> -->
+         <img src="../public/imgs/main/content_logo.png">
     </div>
 
-    <!-- MUTED TEXT -->
-    <div class="audio-muted">
-        <p id="red_p">Enable Audio For The Best Experience!</p>
+    <div class="ZE-CONTENT-BOX">
+        <div class="content">
+            <a href="../public/pages/catclicker/">CatClicker</a>
+            <p>You click the cat. :D</p>
+
+            <a href="../public/pages/catbounce/">Catbounce</a>
+            <p>A bouncing cat.</p>
+        </div>
     </div>
 
+    <div id="space"></div>
+
+    <div class="credits-box-title">
+        <!-- <h2>EPIC PAGES</h2> -->
+         <img src="../public/imgs/main/credits_logo.png">
+    </div>
+
+    <div class="ZE-CREDITS-BOX">
+        <div class="credits">
+
+            <span id="credit-title">CATBOUNCE</span>
+            <br>
+            <span>BG Music: </span>
+            <a href="https://www.youtube.com/watch?v=7G4nFIn6GJs">"silly cat"</a>
+            <span> - Carpe (YT)</span>
+            <br>
+            <span>SFX: </span>
+            <a href="https://www.myinstants.com/en/instant/yaaaaaaaay/">"YAAAAAAAAY"</a>
+            <span> - Myinstants.com</span>
+
+            <br>
+            <br>
+            <span id="credit-title">FEAR</span>
+            <br>
+            <span>Video: </span>
+            <a href="https://youtu.be/tyRWLuQx4R4?si=TCJrnxuf7cK_mBUB">"SpongeBob 👀 getting chased by running skeleton GIF with Demented Dig-Dug music playing"</a>
+            <span> - Lucas Johnston (YT)</span>
+
+            <br>
+            <br>
+            <span id="credit-title">CATCLICKER</span>
+            <br>
+            <span>MUSIC: </span>
+            <a href="https://youtu.be/ZnnS2N4KAkI?si=vL-BOqhzV_jIMhjG">"♫ Suspenseful Chase Music ♪ - Escaping (Copyright And Royalty Free)"</a>
+            <span> - Erlend Flatin (YT)</span>
+            <br>
+
+            <span>SFX: </span>
+            <br>
+            <a href="https://www.myinstants.com/en/instant/meow-1-25594/">"Meow 1"</a>
+            <span> - Myinstants.com</span>
+
+            <br>
+            <a href="https://www.myinstants.com/en/instant/mario-meow-16979/">"mario meow"</a>
+            <span> - Myinstants.com</span>
+
+            <br>
+            <a href="https://www.myinstants.com/en/instant/boykisser-meow-99529/">"Boykisser meow"</a>
+            <span> - Myinstants.com</span>
+
+            <br>
+            <a href="https://sounds.spriters-resource.com/pc_computer/balatro/asset/452647/">"chips2.ogg"</a>
+            <span> - The Sounds Resource</span>
+
+            <br>
+            <a href="https://sounds.spriters-resource.com/pc_computer/undertale/asset/399803/">"snd_hurt1.wav"</a>
+            <span> - The Sounds Resource</span>
+
+            <br>
+            <a href="https://sounds.spriters-resource.com/pc_computer/undertale/asset/399803/">"snd_select.wav"</a>
+            <span> - The Sounds Resource</span>
+
+            <br>
+            <a href="https://www.myinstants.com/en/instant/happy-wheels-victory-69803/">"Happy Wheels Victory"</a>
+            <span> - Myinstants.com</span>
+
+            <br>
+            <br>
+            <span id="credit-title">MAIN PAGE</span>
+            <br>
+
+            <span>Logos: </span>
+            <a href="https://cooltext.com/">CoolText.com</a>
+        </div>
+    </div>
+
+    <div id="space"></div>
+
+
+    <div class="bg">
+        <div class="bg-inner">
+            <img src="../public/imgs/main/bg_dark.png" alt="">
+            <img src="../public/imgs/main/bg_dark.png" alt="" aria-hidden="true">
+        </div>
+    </div>
+
+    <script src="main.js"></script>
 </body>
 </html>

@@ -24,7 +24,7 @@ html,body,head{
 
 .credit {
   position: fixed;
-  bottom: 40px;
+  bottom: 10px;
   left: 14px;
   z-index: 10;
 }
@@ -34,21 +34,6 @@ html,body,head{
   font-family: "Comic Sans MS", "Comic Sans", cursive;
   font-size: 16pt;
   color: rgba(255, 255, 255, 0.35);
-}
-
-.creator p {
-  margin: 0; /* kill default <p> margin */
-  font-family: "Comic Sans MS", "Comic Sans", cursive;
-  font-size: 16pt;
-  color: rgba(255, 255, 255, 0.35);
-}
-
-.creator {
-  position: fixed;
-  bottom: 10px;
-  left: 14px;
-  z-index: 10;
-  pointer-events: none;
 }
 
 .audio-muted {
@@ -72,14 +57,6 @@ html,body,head{
 #floatleft_space {
   float: left;
   color: transparent;
-}
-
-#creator  {
-  margin: 0; /* kill default <p> margin */
-  font-family: "Comic Sans MS", "Comic Sans", cursive;
-  font-size: 16pt;
-  color: rgba(0, 255, 0, 0.35);
-  float: left;
 }
 
 .BTNS button {

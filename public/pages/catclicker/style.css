@@ -12,34 +12,41 @@ html,body{
   display: flex;
   justify-content: center;
   align-items: center;
+  user-select: none;
 }
 
 #click-cat-img {
   transition: all 0.1s ease-in-out;
 }
 
-#count-box p {
-  color: white;
-  font-size: 30px;
-  transition: all 0.3s ease-in-out;
-  transform: translateX(-80px);
-  pointer-events: none;
-}
-
 #count-box {
+  /* position: fixed; */
+  /* z-index: 10; */
+  /* pointer-events: none; */
+  /* user-select: none; */
+
+  left: 0;
+  right: 0;
+  bottom: 10px;
+  margin-inline: auto;
+  display: flex;
+  font-family: "Comic Sans MS", "Comic Sans", cursive;
+  color: white;
+  max-width: 50%;
+  justify-content: center;
+  align-items: center;
+  text-align : center;
+
   position: fixed;
-  top: 10px;
-  left: 14px;
-  z-index: 10;
-  pointer-events: none;
 }
 
 #count-box p {
   color: white;
   font-size: 30px;
   transition: all 0.3s ease-in-out;
-  transform: translateX(-200px);
+  transform: translateY(200px);
   pointer-events: none;
+  font-family: "Comic Sans MS", "Comic Sans", cursive;
 }
 
 #survive-box {
@@ -53,6 +60,7 @@ html,body{
   display: flex;
   justify-content: center;
   align-items: center;
+  user-select: none;
 }
 
 #survive-box p {
@@ -61,6 +69,7 @@ html,body{
   transition: all 0.3s ease-in-out;
   transform: translateY(-80px);
   pointer-events: none;
+  font-family: "Comic Sans MS", "Comic Sans", cursive;
 }
 
 #win-box {
@@ -75,6 +84,7 @@ html,body{
   display: flex;
   justify-content: center;
   align-items: center;
+  user-select: none;
 }
 
 #win-box p {
@@ -83,6 +93,57 @@ html,body{
   transition: all 1s ease-in-out;
   pointer-events: none;
   opacity: 0;
+  font-family: "Comic Sans MS", "Comic Sans", cursive;
+}
+
+#best-cps-box {
+  left: 0;
+  right: 0;
+  top: 10px;
+  margin-inline: auto;
+  display: flex;
+  font-family: "Comic Sans MS", "Comic Sans", cursive;
+  color: white;
+  max-width: 50%;
+  justify-content: center;
+  align-items: center;
+  text-align : center;
+
+  position: fixed;
+}
+
+#best-cps-box p {
+  color: rgb(255, 255, 0);
+  font-size: 30px;
+  transition: all 1s ease-in-out;
+  pointer-events: none;
+  opacity: 0;
+  font-family: "Comic Sans MS", "Comic Sans", cursive;
+}
+
+#best-count-box {
+  left: 0;
+  right: 0;
+  top: 80px;
+  margin-inline: auto;
+  display: flex;
+  font-family: "Comic Sans MS", "Comic Sans", cursive;
+  color: white;
+  max-width: 50%;
+  justify-content: center;
+  align-items: center;
+  text-align : center;
+
+  position: fixed;
+}
+
+#best-count-box p {
+  color: rgb(30, 255, 0);
+  font-size: 30px;
+  transition: all 1s ease-in-out;
+  pointer-events: none;
+  opacity: 0;
+  font-family: "Comic Sans MS", "Comic Sans", cursive;
 }
 
 #lose-box {
@@ -97,6 +158,7 @@ html,body{
   display: flex;
   justify-content: center;
   align-items: center;
+  user-select: none;
 }
 
 #lose-box p {
@@ -105,6 +167,7 @@ html,body{
   transition: all 1s ease-in-out;
   pointer-events: none;
   opacity: 0;
+  font-family: "Comic Sans MS", "Comic Sans", cursive;
 }
 
 
@@ -116,4 +179,5 @@ html,body{
 	opacity: 0;
 	visibility: hidden;
 	pointer-events: none;
+  user-select: none;
 }
