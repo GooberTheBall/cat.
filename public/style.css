@@ -2,6 +2,12 @@ html,body{
   margin:0;
   height:100%;
   overflow-x: hidden;
+
+  scrollbar-color: #005304 #053d00;
+  scrollbar-width: auto;
+
+  scrollbar-shadow-color: black;
+
 }
 
 .bg {
@@ -173,7 +179,7 @@ hr {
     outline-style: double;
     outline-width: 3px;
     outline-color: black;
-    /* outline-offset: 8px; */
+
     padding: 5px;
 
     border-radius: 5px;
@@ -239,17 +245,61 @@ hr {
     margin-bottom: 20px;
 }
 
-.content a{
-    color: lightgreen;
+.site-footer {
+    left: 0;
+    right: 0;
+    margin-inline: auto;
+    display: flex;
+    font-family: "Comic Sans MS", "Comic Sans", cursive;
+    color: white;
+
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    text-align : center;
+
+
+    outline-style: double;
+    outline-width: 3px;
+    outline-color: black;
+
+    padding: 5px;
+
+    border-radius: 5px;
+    border-color: black;
+    background-color: rgba(0, 0, 0, 0.7);
+
+    margin-left: -2px; /* aint NOBODY noticing that the text is 2 pixels off */
+
+    /* margin-bottom: 20px; */
 }
 
-.content {
+.content a{
+    color: lightgreen;
     width: 100%;
+    word-wrap: normal;
+}
+
+.content > #hidden{
+    color: rgba(255, 255, 255, 0.35);
+    width: 100%;
+    word-wrap: normal;
+}
+
+.content span{
+    width: 100%;
+    word-wrap: normal;
 }
 
 .about span{
     width: 100%;
     word-wrap: normal;
+}
+
+.about > #red{
+    width: 100%;
+    word-wrap: normal;
+    color: lightcoral;
 }
 
 .credits span{

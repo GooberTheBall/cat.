@@ -53,19 +53,17 @@ async function playMusic() {
         }
     } catch (err) {
         console.warn("Even muted autoplay failed:", err);
+        alert("If you want music, put autoplay on! - GooberTheBall")
     }
     
     adjustButtonPositions();
     
     window.addEventListener('pageshow', (event) => {
-        if (bg && bg.paused) {
+        const policy = navigator.getAutoplayPolicy?.("mediaelement") || "unknown";
+        console.log(policy)
+        if (bg && bg.paused && policy !== "disallowed") {
+            console.log("RESUMING??? - pageshow")
             bg.play().catch(e => console.warn("Couldn't resume music on pageshow:", e));
-        }
-    });
-    
-    document.addEventListener('visibilitychange', () => {
-        if (document.visibilityState === 'visible' && bg && bg.paused) {
-            bg.play().catch(e => console.warn("Couldn't resume music on visibilitychange:", e));
         }
     });
 }
