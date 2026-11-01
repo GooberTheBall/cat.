@@ -1,4 +1,4 @@
-function checkifonphoneortablet() {}
+function checkifonphoneortablet() {
     let ON_PHONE_OR_TABLET = false;
     const aww = new Audio("sfx/sad-trombone.mp3");
     function playexitingsfx() {
@@ -16,10 +16,11 @@ function checkifonphoneortablet() {}
     }
 
     if (ON_PHONE_OR_TABLET == true) {
-        play_sfx();
+        playexitingsfx();
         alert("Sorry, this website (and all of it's other pages) don't support mobile/tablet, only on a computer/laptop.\n- GooberTheBall");
 
         window.close();
     }
+}
 
 checkifonphoneortablet()
