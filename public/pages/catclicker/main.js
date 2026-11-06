@@ -24,6 +24,7 @@ const lose_count_sfx = new Audio("../../sfx/snd_hurt1.mp3")
 const gain_count_sfx = new Audio("../../sfx/snd_select.mp3")
 
 const scary_music = new Audio("../../music/SCARY AAA.mp3")
+scary_music.preload = 'auto';
 
 let meow_count = 0;
 let scaling = 0;
@@ -72,34 +73,42 @@ function randint(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
-function playWithPitch(audio, pitch, vol) {
-    const soundClone = audio.cloneNode();
-    soundClone.preservesPitch = false;
-    soundClone.playbackRate = pitch;
-    soundClone.volume = vol;
-    soundClone.play();
-};
+// MAKE EVERY SOUND HAVE THEIR OWN POOL
+function makePool(src, size = 3, volume = 0.3) {
+	const pool = [];
+	for (let i = 0; i < size; i++) {
+		const a = new Audio(src);
+		a.preload = 'auto';
+		a.volume = volume;
+		pool.push(a);
+	}
+	let i = 0;
+	return function play(pitch = 1, vol = volume) {
+		const a = pool[i];
+		i = (i + 1) % pool.length;
+		a.preservesPitch = false;
+		a.playbackRate = pitch;
+		a.volume = vol;
+		try { a.currentTime = 0; } catch (e) {}
+		const p = a.play();
+		if (p && p.catch) p.catch(() => {});
+	};
+}
 
-function playRandomizedPitch(audio) {
-    const soundClone = audio.cloneNode();
-    soundClone.preservesPitch = false;
-    soundClone.playbackRate = randfloat(0.5,1.0);
-    soundClone.volume = 0.2;
-    soundClone.play();
-};
+const playMeow = [
+	makePool("../../sfx/mario-meow.mp3", 3, 0.2),
+	makePool("../../sfx/meow-irl.mp3", 3, 0.2),
+	makePool("../../sfx/boykisser-meow1.mp3", 3, 0.2),
+	makePool("../../sfx/boykisser-meow2.mp3", 3, 0.2),
+];
 
-function playRandomSound() {
-    let rnd = randint(1,4);
-    if (rnd == 1) {
-        playRandomizedPitch(click_mew_audio1);
-    } else if (rnd == 2) {
-        playRandomizedPitch(click_mew_audio2);
-    } else if (rnd == 3) {
-        playRandomizedPitch(click_mew_audio3);
-    } else {
-        playRandomizedPitch(click_mew_audio4);
-    };
-};
+const playChips = makePool("../../sfx/chips.mp3", 3, 0.3);
+const playGain = makePool("../../sfx/snd_select.mp3", 3, 0.3);
+const playHurt = makePool("../../sfx/snd_hurt1.mp3", 3, 0.3);
+const playWinYay = makePool("../../sfx/children-yay.mp3", 1, 0.5);
+const playVictory = makePool("../../sfx/victory.mp3", 1, 0.5);
+const playLoseAw = makePool("../../sfx/audience-aw.mp3", 1, 0.5);
+const playLoseTrombone = makePool("../../sfx/sad-trombone.mp3", 1, 0.5);
 
 function play_music() {
     scary_music.volume = 0.7;
@@ -116,11 +125,8 @@ function add_count(amount) {
     meow_count = meow_count + amount;
     counttxt.textContent = `${meow_count}`;
 
-    console.log(game_state);
-
     if (meow_count > 4) {
         txt_move_in = 1;
-        console.log(meow_count);
     };
     change_cat();
 };
@@ -131,8 +137,18 @@ function lose_count(amount) {
 };
 
 
-// yes im doing a different way of getting the cat images, fuck you
+// FIX LOADING CATS
+// instead of fetching it's image every frame every fucking click, we preload a shuffled subset once, then just swap the source (.src) between already-decoded, already-cached Image objects
 let catsList = [];
+let catImageCache = [];
+let catCacheReady = false;
+let catSwapIndex = 0;
+let lastCatSwap = 0;
+const CAT_SWAP_MIN_MS = 70;   // don't swap more than ~14x/sec cus we need at least SOME limit to it
+const PRELOAD_COUNT = 30;
+
+let evilCatImg = null;
+let evilCatApplied = false;
 
 async function initCats() {
     try {
@@ -140,11 +156,31 @@ async function initCats() {
         if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
         
         catsList = await res.json();
-        
         if (!Array.isArray(catsList) || !catsList.length) {
             throw new Error('No cats returned in JSON');
         }
         console.log(`Successfully loaded ${catsList.length} cats!`);
+        
+        // Preload the evil cat once
+        const evilPath = catsList.find(p => p.endsWith('fuckyou.png'));
+        if (evilPath) {
+            evilCatImg = new Image();
+            evilCatImg.src = '../../' + evilPath;
+        }
+        
+        // Preload a random subset of cats
+        const shuffled = [...catsList].sort(() => Math.random() - 0.5);
+        const toLoad = shuffled.slice(0, Math.min(PRELOAD_COUNT, shuffled.length));
+        
+        await Promise.all(toLoad.map(path => new Promise(resolve => {
+            const img = new Image();
+            img.onload  = () => { catImageCache.push(img); resolve(); };
+            img.onerror = () => resolve();
+            img.src = '../../' + path;
+        })));
+        
+        catCacheReady = catImageCache.length > 0;
+        if (catCacheReady) clickercat.src = catImageCache[0].src;
     } catch (err) {
         console.error('Could not load cats:', err);
     }
@@ -153,66 +189,24 @@ async function initCats() {
 initCats();
 
 function change_cat() {
-    if (catsList.length === 0) return; 
+    if (!catCacheReady) return;
 
-    let failCount = 0;
-    
-    function updateCat() {
-        if (failCount > 5) {
-            console.warn("Too many failed loads, sticking with current image.");
-            failCount = 0; 
-            return;
-        }
-        
-        const randomCat = catsList[Math.floor(Math.random() * catsList.length)];
-        const nextCatUrl = '../../' + randomCat + '?r=' + Date.now();
-        const tempImg = new Image();
-        
-        tempImg.onload = () => {
-            clickercat.src = nextCatUrl; 
-            failCount = 0;
-        };
-        
-        tempImg.onerror = () => {
-            console.warn('Cat image failed to load:', nextCatUrl);
-            failCount++;
-            setTimeout(updateCat, 1500); 
-        };
-        
-        tempImg.src = nextCatUrl;
-    }
-    
-    updateCat();
+	const now = performance.now();
+	if (now - lastCatSwap < CAT_SWAP_MIN_MS) return;
+	lastCatSwap = now;
+
+	let next = Math.floor(Math.random() * catImageCache.length);
+	if (next === catSwapIndex && catImageCache.length > 1) {
+		next = (next + 1) % catImageCache.length;
+	}
+	catSwapIndex = next;
+	clickercat.src = catImageCache[catSwapIndex].src;
 }
 
 function change_cat_to_EVIL() {
-    if (catsList.length === 0) return; 
-
-    const evilCatPath = catsList.find(path => path.endsWith('fuckyou.png'));
-
-    if (!evilCatPath) {
-        console.warn('fuckyou.png not found in cats.json');
-        return;
-    }
-
-    let failCount = 0;
-    
-    function updateCatToEVIL() {
-        if (failCount > 5) { failCount = 0; return; }
-        
-        const nextCatUrl = '../../' + evilCatPath + '?r=' + Date.now();
-        const tempImg = new Image();
-        
-        tempImg.onload  = () => { clickercat.src = nextCatUrl; failCount = 0; };
-        tempImg.onerror = () => {
-            failCount++;
-            setTimeout(updateCatToEVIL, 1500); 
-        };
-        
-        tempImg.src = nextCatUrl;
-    }
-    
-    updateCatToEVIL();
+    if (evilCatApplied || !evilCatImg) return;
+	evilCatApplied = true;
+	clickercat.src = evilCatImg.src;
 }
 
 
@@ -234,12 +228,8 @@ function recordClickCPS() {
 
 let prevtime = 0;
 function frame(timestamp) {
-    const deltatime = (timestamp - prevtime) / 1000;
+    const deltatime = Math.min((timestamp - prevtime) / 1000, 0.1);
     prevtime = timestamp;
-
-    function delta(time) {
-        time -= deltatime;
-    };
 
     // if (lose_count_time < 0) {
         // lose_count(1)
@@ -249,16 +239,15 @@ function frame(timestamp) {
 
     if (scaling > 0) {
         clickercat.style.transform = "scale(1.2)";
-        scaling -= deltatime;
-        delta(scaling);
+        scaling = scaling - deltatime;
     } else {
         clickercat.style.transform = "scale(1)";
     };
 
     if (txt_move_in > 0) {
         counttxt.style.transform = "translateY(-150px)";
-        // txt_move_in -= deltatime;
-        delta(txt_move_in);
+        txt_move_in = txt_move_in - deltatime;
+        // delta(txt_move_in);
     };
 
     if (SURVIVE_SHAKING == true) {
@@ -274,14 +263,14 @@ function frame(timestamp) {
     if (game_state == 2) {
         if (lose_count_time <= 0) {
             lose_count(1);
-            const shake_x_count = (Math.random() * 2 - 1) * 4;
-            counttxt.style.transform = `translateX(${shake_x_count}px)`;
+            // dont need to damn shake
+            // const shake_x_count = (Math.random() * 2 - 1) * 4;
+            // counttxt.style.transform = `translateX(${shake_x_count}px)`;
             counttxt.style.color = "red";
-            playWithPitch(lose_count_sfx, randfloat(0.7,1.0), 0.3);
+            playHurt(randfloat(0.7, 1.0), 0.3);
             lose_count_time = lose_count_time_max_num;
         } else {
             lose_count_time = lose_count_time - deltatime;
-            console.log(lose_count_time);
         };
 
         if (make_max_count_time_faster <= 0) {
@@ -293,10 +282,11 @@ function frame(timestamp) {
             make_max_count_time_faster = make_max_count_time_faster - deltatime;
         };
 
-        console.log(TIME_TO_SURVIVE)
         if (TIME_TO_SURVIVE > 0) {
-            survivetxt.textContent = `[!!SURVIVE FOR ${TIME_TO_SURVIVE}!!]`;
-            TIME_TO_SURVIVE = (TIME_TO_SURVIVE - deltatime).toFixed(2);
+            // TIME_TO_SURVIVE = (TIME_TO_SURVIVE - deltatime).toFixed(2);
+            TIME_TO_SURVIVE = TIME_TO_SURVIVE - deltatime
+            timetosurvive_txt = TIME_TO_SURVIVE.toFixed(2)
+			survivetxt.textContent = `[!!SURVIVE FOR ${timetosurvive_txt}!!]`;
         };
 
         if (meow_count <= 0) {
@@ -321,8 +311,8 @@ function frame(timestamp) {
 
         if (PLAY_SOUND_ONCE == false) {
             PLAY_SOUND_ONCE = true;
-            playWithPitch(win, 1.0, 0.5);
-            playWithPitch(victory_sound, 1.0, 0.5);
+            playWinYay(1.0, 0.5);
+			playVictory(1.0, 0.5);
         };
 
         if (!CPS_SHOWN) {
@@ -349,8 +339,8 @@ function frame(timestamp) {
 
         if (PLAY_SOUND_ONCE == false) {
             PLAY_SOUND_ONCE = true;
-            playWithPitch(lose1, 1.0, 0.5);
-            playWithPitch(lose2, 1.0, 0.5);
+            playLoseAw(1.0, 0.5);
+			playLoseTrombone(1.0, 0.5);
         };
 
         stop_music()
@@ -365,15 +355,14 @@ window.requestAnimationFrame((timestamp) => {
 });
 
 clickercat.addEventListener('click', () => {
-    console.log('Image clicked!');
     if (game_state == 2) {
         recordClickCPS();
     };
     scaling = 0.04; // SCALE IMAGE
 
     // PLAY SOUNDS
-    playRandomSound();
-    playWithPitch(chips, randfloat(0.7,1.0), 0.3);
+    playMeow[randint(0, 3)](randfloat(0.5, 1.0), 0.2);
+	playChips(randfloat(0.7, 1.0), 0.3);
 
     // IF OVER 24, START REMOVING COUNT, ELSE JUST CONTINUE
     if (meow_count > 24 && game_state == 0) {
@@ -384,7 +373,7 @@ clickercat.addEventListener('click', () => {
         counttxt.style.color = "white";
     } else {
         add_count(1);
-        playWithPitch(gain_count_sfx, randfloat(0.7,1.0), 0.3);
+        playGain(randfloat(0.7, 1.0), 0.3);
         counttxt.style.color = "white";
     }
 });
